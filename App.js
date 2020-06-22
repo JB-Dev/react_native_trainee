@@ -1,37 +1,79 @@
 import React, {Component} from 'react';
-import {
-  AppRegistry,
-  View,
-  Text,
-  Image,
-  StyleSheet,
-  SafeAreaView,
-} from 'react-native';
-import constants from './src/config/constants';
+import Home from '../react_native_trainee/src/screens/Home/Home';
+import Login from '../react_native_trainee/src/screens/Login/Login';
+import {NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
+import {createDrawerNavigator} from '@react-navigation/drawer';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import Profile from './src/screens/profile/profile';
+import Details from './src/screens/details/details';
+import Splash from './src/screens/splash/splash';
+import SignUp from './src/screens/SignUp/SignUp';
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  tinyLogo: {
-    width: 100,
-    height: 100,
-  },
-  logo: {
-    width: 66,
-    height: 58,
-  },
-});
+const Stack = createStackNavigator();
+const Tabs = createBottomTabNavigator();
+const HomeStack = createStackNavigator();
+const Drawer = createDrawerNavigator();
+const ProfileStack = createStackNavigator();
+const AuthSatck = createStackNavigator();
 
-export default class App extends Component {
-  render() {
-    return (
-      <SafeAreaView style={styles.container}>
-        <Image style={styles.tinyLogo} source={{uri: constants.IMG_URI}} />
-        <Text>React Native</Text>
-      </SafeAreaView>
-    );
+const HomeStackScreen = () => (
+  <HomeStack.Navigator>
+    <HomeStack.Screen name="Home" component={Home} />
+    <HomeStack.Screen name="Details" component={Details} />
+  </HomeStack.Navigator>
+);
+const ProfileStackScreen = () => (
+  <ProfileStack.Navigator>
+    <ProfileStack.Screen name="Profile" component={Profile} />
+  </ProfileStack.Navigator>
+);
+const TabScreen = () => (
+  <Tabs.Navigator>
+    <Tabs.Screen name="Home" component={HomeStackScreen} />
+    <Tabs.Screen name="Profile" component={ProfileStackScreen} />
+  </Tabs.Navigator>
+);
+export default () => {
+  const [isLoading, setIsLoading] = React.useState(true);
+  const [userToken, setUserToken] = React.useState(null);
+
+  const anthContext = React.useMemo(() => {});
+
+  React.useEffect(() => {
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1500);
+  }, []);
+
+  if (isLoading) {
+    return <Splash />;
   }
+  return (
+    <NavigationContainer>
+      {userToken ? (
+        <Drawer.Navigator initialRouteName="Home">
+          <Drawer.Screen name="Home" component={TabScreen} />
+          <Drawer.Screen name="Profile" component={ProfileStackScreen} />
+        </Drawer.Navigator>
+      ) : (
+        <AuthSatck.Navigator>
+          <AuthSatck.Screen name="Login" component={Login} />
+          <AuthSatck.Screen name="Sign-Up" component={SignUp} />
+        </AuthSatck.Navigator>
+      )}
+    </NavigationContainer>
+  );
+};
+{
+  /* <Tabs.Navigator>
+      <Tabs.Screen name="Home" component={HomeStackScreen} />
+      <Tabs.Screen name="Profile" component={ProfileStackScreen} />
+    </Tabs.Navigator> */
+}
+{
+  /* <Stack.Navigator>
+      <Stack.Screen name="Home" component={Home} />
+      <Stack.Screen name="Login" component={Login} />
+    </Stack.Navigator> */
 }
