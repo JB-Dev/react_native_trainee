@@ -18,18 +18,18 @@ const ProfileStack = createStackNavigator();
 const AuthSatck = createStackNavigator();
 
 const HomeStackScreen = () => (
-  <HomeStack.Navigator>
+  <HomeStack.Navigator headerMode="none">
     <HomeStack.Screen name="Home" component={Home} />
     <HomeStack.Screen name="Details" component={Details} />
   </HomeStack.Navigator>
 );
 const ProfileStackScreen = () => (
-  <ProfileStack.Navigator>
+  <ProfileStack.Navigator headerMode="none">
     <ProfileStack.Screen name="Profile" component={Profile} />
   </ProfileStack.Navigator>
 );
 const TabScreen = () => (
-  <Tabs.Navigator>
+  <Tabs.Navigator tabBarOptions={{showIcon: false}}>
     <Tabs.Screen name="Home" component={HomeStackScreen} />
     <Tabs.Screen name="Profile" component={ProfileStackScreen} />
   </Tabs.Navigator>
@@ -43,12 +43,13 @@ export default () => {
   React.useEffect(() => {
     setTimeout(() => {
       setIsLoading(false);
-    }, 1500);
+    }, 1000);
   }, []);
 
   if (isLoading) {
     return <Splash />;
   }
+
   return (
     <NavigationContainer>
       {userToken ? (
@@ -57,7 +58,7 @@ export default () => {
           <Drawer.Screen name="Profile" component={ProfileStackScreen} />
         </Drawer.Navigator>
       ) : (
-        <AuthSatck.Navigator>
+        <AuthSatck.Navigator headerMode="none">
           <AuthSatck.Screen name="Login" component={Login} />
           <AuthSatck.Screen name="Sign-Up" component={SignUp} />
         </AuthSatck.Navigator>
