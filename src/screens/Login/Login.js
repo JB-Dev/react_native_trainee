@@ -10,8 +10,11 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Keyboard,
 } from 'react-native';
 import {SubmitButton} from '../../components/submitButton';
+import {BackButton} from '../../components/backButton';
+import strings from '../../config/strings';
 
 export default class Login extends Component {
   constructor(props) {
@@ -21,21 +24,26 @@ export default class Login extends Component {
       password: '',
     };
   }
+
+  handleBack() {
+    this.props.navigation.goBack();
+  }
+
   renderLogoView() {
     return (
       <View style={styles.logo}>
         <Text style={{...styles.logo, ...baseStyle.textTitle}}>
-          Trainee App
+          Welcome Back!
         </Text>
-        {/* <Image
-          style={styles.image}
-          source={require('../../assets/images/logo.png')}
-        /> */}
       </View>
     );
   }
 
+  handleSignUp() {
+    this.props.navigation.navigate('SignUp');
+  }
   handleSubmit() {
+    Keyboard.dismiss();
     if (this.state.email !== '' && this.state.password !== '') {
       Alert.alert('Login Success ' + this.state.email);
     } else {
@@ -63,14 +71,28 @@ export default class Login extends Component {
     );
   }
 
+  renderSignUpView() {
+    return (
+      <TouchableOpacity
+        style={{alignSelf: 'center'}}
+        onPress={() => this.handleSignUp()}>
+        <Text style={{...baseStyle.textInput}}>
+          {strings.noAccount}
+          <Text style={{color: colors.colorAccent}}>{strings.signUp}</Text>
+        </Text>
+      </TouchableOpacity>
+    );
+  }
   render() {
     return (
       <SafeAreaView style={{...baseStyle.container}}>
+        {/* <View>
+          <BackButton action={() => this.handleBack()} />
+        </View> */}
         <View>{this.renderLogoView()}</View>
         <View marginTop={10}>{this.renderCredentialView()}</View>
-        <View>
-          <SubmitButton text="LOGIN" action={() => this.handleSubmit()} />
-        </View>
+        <SubmitButton text="LOGIN" action={() => this.handleSubmit()} />
+        <View>{this.renderSignUpView()}</View>
       </SafeAreaView>
     );
   }
@@ -79,11 +101,12 @@ const styles = StyleSheet.create({
   logo: {
     alignSelf: 'center',
     marginTop: '30%',
+    marginBottom: 10,
   },
   emailView: {
     backgroundColor: colors.colorBackground,
     marginHorizontal: 20,
-    marginVertical: 20,
+    marginBottom: 20,
     borderRadius: 10,
     height: 50,
     padding: 10,

@@ -7,8 +7,9 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Profile from './src/screens/profile/profile';
 import Details from './src/screens/details/details';
-import Splash from './src/screens/splash/splash';
 import SignUp from './src/screens/SignUp/SignUp';
+import StartScreen from './src/screens/StartScreen/StartScreen';
+import Loading from './src/screens/Loading/Loading';
 
 const Stack = createStackNavigator();
 const Tabs = createBottomTabNavigator();
@@ -47,7 +48,7 @@ export default () => {
   }, []);
 
   if (isLoading) {
-    return <Splash />;
+    return <Loading />;
   }
 
   return (
@@ -59,8 +60,9 @@ export default () => {
         </Drawer.Navigator>
       ) : (
         <AuthSatck.Navigator headerMode="none">
+          {/* <AuthSatck.Screen name="Start" component={StartScreen} /> */}
           <AuthSatck.Screen name="Login" component={Login} />
-          <AuthSatck.Screen name="Sign-Up" component={SignUp} />
+          <AuthSatck.Screen name="SignUp" component={SignUp} />
         </AuthSatck.Navigator>
       )}
     </NavigationContainer>

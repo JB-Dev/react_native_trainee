@@ -14,7 +14,7 @@ export const SubmitButton = ({text, action}) => {
         justifyContent: 'center',
         borderRadius: 10,
         marginHorizontal: 20,
-        marginVertical: 20,
+        marginVertical: 10,
       }}>
       <Text style={{color: '#fff', ...baseStyle.textInput}}>{text}</Text>
     </TouchableOpacity>
