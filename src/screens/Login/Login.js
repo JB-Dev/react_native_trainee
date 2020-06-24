@@ -15,19 +15,38 @@ import {
 import {SubmitButton} from '../../components/submitButton';
 import {BackButton} from '../../components/backButton';
 import strings from '../../config/strings';
+import keys from '../../config/keys';
+import AsyncStorage from '@react-native-community/async-storage';
+import {NavigationActions} from 'react-navigation';
+import {StackActions} from '@react-navigation/native';
 
 export default class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: '',
-      password: '',
+      email: 'Softices@gmail.com',
+      password: '12345678',
+      userDetails: '',
     };
+    this.getUserData();
   }
 
-  handleBack() {
-    this.props.navigation.goBack();
-  }
+  getUserData = async () => {
+    try {
+      const userData = await AsyncStorage.getItem(keys.userData);
+      if (userData !== null) {
+        this.setState({
+          userDetails: JSON.parse(userData),
+          // email: userDetails.email,
+          // password: userDetails.password,
+        });
+      } else {
+        Alert.alert(strings.somethingWrong);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   renderLogoView() {
     return (
@@ -42,10 +61,17 @@ export default class Login extends Component {
   handleSignUp() {
     this.props.navigation.navigate('SignUp');
   }
+
   handleSubmit() {
     Keyboard.dismiss();
-    if (this.state.email !== '' && this.state.password !== '') {
-      Alert.alert('Login Success ' + this.state.email);
+    const data = this.state.userDetails;
+    if (
+      this.state.email !== '' &&
+      this.state.password !== '' &&
+      this.state.email == data.email &&
+      this.state.password == data.password
+    ) {
+      this.props.navigation.dispatch(StackActions.replace('Home'));
     } else {
       Alert.alert('Enter Valid Credential');
     }
@@ -55,12 +81,14 @@ export default class Login extends Component {
     return (
       <View style={{...styles.credentialContainer}}>
         <TextInput
+          value={this.state.email}
           onChangeText={(text) => this.setState({email: text})}
           placeholder="Email"
           placeholderTextColor="#fff"
           style={styles.emailView}
         />
         <TextInput
+          value={this.state.password}
           onChangeText={(text) => this.setState({password: text})}
           placeholder="Password"
           secureTextEntry={true}

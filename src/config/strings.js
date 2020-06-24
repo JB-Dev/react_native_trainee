@@ -8,4 +8,5 @@ export default {
   createAccount: 'Create Account',
   noAccount: 'No account?',
   signUp: 'Sign Up',
+  somethingWrong: 'Something went wrong',
 };

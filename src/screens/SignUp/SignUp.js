@@ -7,7 +7,6 @@ import {
   ScrollView,
   Alert,
   Keyboard,
-  AsyncStorage,
 } from 'react-native';
 import baseStyle from '../../config/baseStyle';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -18,16 +17,17 @@ import RNPickerSelect from 'react-native-picker-select';
 import stylePicker from './stylePicker';
 import {BackButton} from '../../components/backButton';
 import keys from '../../config/keys';
+import AsyncStorage from '@react-native-community/async-storage';
 
 export default class SignUp extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: '',
-      email: '',
-      password: '',
-      phonenumber: '',
-      gender: '',
+      name: 'Softices',
+      email: 'Softices@gmail.com',
+      password: '12345678',
+      phonenumber: '8989898989',
+      gender: 'male',
       genderChoice: [
         {label: 'Male', value: 'male'},
         {label: 'Female', value: 'female'},
@@ -51,6 +51,7 @@ export default class SignUp extends Component {
           <TextInput
             style={{...styles.textInput}}
             placeholder="Enter Name"
+            value={this.state.name}
             placeholderTextColor={colors.colorWhite}
             onChangeText={(text) =>
               this.setState({
@@ -69,6 +70,7 @@ export default class SignUp extends Component {
           <TextInput
             style={{...styles.textInput}}
             placeholder="Enter Email"
+            value={this.state.email}
             keyboardType="email-address"
             placeholderTextColor={colors.colorWhite}
             onChangeText={(text) =>
@@ -89,6 +91,7 @@ export default class SignUp extends Component {
             style={{...styles.textInput}}
             placeholder="Enter Phone"
             maxLength={10}
+            value={this.state.phonenumber}
             keyboardType="numeric"
             placeholderTextColor={colors.colorWhite}
             onChangeText={(text) =>
@@ -130,6 +133,7 @@ export default class SignUp extends Component {
             style={{...styles.textInput}}
             placeholder="Enter Password"
             secureTextEntry={true}
+            value={this.state.password}
             placeholderTextColor={colors.colorWhite}
             onChangeText={(text) =>
               this.setState({
@@ -143,14 +147,21 @@ export default class SignUp extends Component {
 
   handleSubmit() {
     Keyboard.dismiss();
-    var user_details = {};
-    user_details.name = this.state.name;
-    user_details.email = this.state.email;
-    user_details.phonenumber = this.state.phonenumber;
-    user_details.gender = this.state.gender;
-    user_details.password = this.state.password;
-    AsyncStorage.setItem(keys.user_details, JSON.stringify(user_details));
+    let user_details = {
+      name: this.state.name,
+      email: this.state.email,
+      phonenumber: this.state.phonenumber,
+      gender: this.state.gender,
+      password: this.state.password,
+    };
+    this.setUserData(user_details);
+    this.props.navigation.goBack();
   }
+
+  setUserData = async (user_details) => {
+    await AsyncStorage.setItem(keys.userData, JSON.stringify(user_details));
+  };
+
   handleBack() {
     this.props.navigation.goBack();
   }

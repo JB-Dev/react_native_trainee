@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, useState} from 'react';
 import Home from '../react_native_trainee/src/screens/Home/Home';
 import Login from '../react_native_trainee/src/screens/Login/Login';
 import {NavigationContainer} from '@react-navigation/native';
@@ -8,8 +8,10 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Profile from './src/screens/profile/profile';
 import Details from './src/screens/details/details';
 import SignUp from './src/screens/SignUp/SignUp';
-import StartScreen from './src/screens/StartScreen/StartScreen';
 import Loading from './src/screens/Loading/Loading';
+import {View} from 'native-base';
+import {set} from 'react-native-reanimated';
+import {setLoginState} from './src/store/action/setLoginState';
 
 const Stack = createStackNavigator();
 const Tabs = createBottomTabNavigator();
@@ -24,6 +26,12 @@ const HomeStackScreen = () => (
     <HomeStack.Screen name="Details" component={Details} />
   </HomeStack.Navigator>
 );
+const DrawerStackScreen = () => (
+  <Drawer.Navigator initialRouteName="Home">
+    <Drawer.Screen name="Home" component={TabScreen} />
+    <Drawer.Screen name="Profile" component={ProfileStackScreen} />
+  </Drawer.Navigator>
+);
 const ProfileStackScreen = () => (
   <ProfileStack.Navigator headerMode="none">
     <ProfileStack.Screen name="Profile" component={Profile} />
@@ -37,9 +45,11 @@ const TabScreen = () => (
 );
 export default () => {
   const [isLoading, setIsLoading] = React.useState(true);
-  const [userToken, setUserToken] = React.useState(null);
-
-  const anthContext = React.useMemo(() => {});
+  var userData = '';
+  var screen = '';
+  const getUserData = async () => {
+    userData = await AsyncStorage.getItem(keys.userData);
+  };
 
   React.useEffect(() => {
     setTimeout(() => {
@@ -51,32 +61,23 @@ export default () => {
     return <Loading />;
   }
 
+  if (userData === null) {
+    setLoginState('true');
+    screen = 'Home';
+  } else {
+    setLoginState('false');
+    screen = 'Login';
+  }
+
   return (
     <NavigationContainer>
-      {userToken ? (
-        <Drawer.Navigator initialRouteName="Home">
-          <Drawer.Screen name="Home" component={TabScreen} />
-          <Drawer.Screen name="Profile" component={ProfileStackScreen} />
-        </Drawer.Navigator>
-      ) : (
-        <AuthSatck.Navigator headerMode="none">
-          {/* <AuthSatck.Screen name="Start" component={StartScreen} /> */}
-          <AuthSatck.Screen name="Login" component={Login} />
-          <AuthSatck.Screen name="SignUp" component={SignUp} />
-        </AuthSatck.Navigator>
-      )}
+      <AuthSatck.Navigator headerMode="none" initialRouteName={screen}>
+        {/* <AuthSatck.Screen name="Start" component={StartScreen} /> */}
+        <AuthSatck.Screen name="Login" component={Login} />
+        <AuthSatck.Screen name="SignUp" component={SignUp} />
+        <AuthSatck.Screen name="Home" component={DrawerStackScreen} />
+        <AuthSatck.Screen name="Profile" component={ProfileStackScreen} />
+      </AuthSatck.Navigator>
     </NavigationContainer>
   );
 };
-{
-  /* <Tabs.Navigator>
-      <Tabs.Screen name="Home" component={HomeStackScreen} />
-      <Tabs.Screen name="Profile" component={ProfileStackScreen} />
-    </Tabs.Navigator> */
-}
-{
-  /* <Stack.Navigator>
-      <Stack.Screen name="Home" component={Home} />
-      <Stack.Screen name="Login" component={Login} />
-    </Stack.Navigator> */
-}
