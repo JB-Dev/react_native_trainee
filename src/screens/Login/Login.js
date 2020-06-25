@@ -13,14 +13,17 @@ import {
   Keyboard,
 } from 'react-native';
 import {SubmitButton} from '../../components/submitButton';
-import {BackButton} from '../../components/backButton';
 import strings from '../../config/strings';
 import keys from '../../config/keys';
 import AsyncStorage from '@react-native-community/async-storage';
-import {NavigationActions} from 'react-navigation';
 import {StackActions} from '@react-navigation/native';
+import {setToken} from '../../store/action/setToken';
+import {setLoginState} from '../../store/action/setLoginState';
+import {Root} from 'native-base';
+import {connect} from 'react-redux';
+import {tokenGenerator} from '../../utils/helper';
 
-export default class Login extends Component {
+class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -37,11 +40,9 @@ export default class Login extends Component {
       if (userData !== null) {
         this.setState({
           userDetails: JSON.parse(userData),
-          // email: userDetails.email,
-          // password: userDetails.password,
         });
       } else {
-        Alert.alert(strings.somethingWrong);
+        // Alert.alert(strings.somethingWrong);
       }
     } catch (e) {
       console.log(e);
@@ -66,11 +67,12 @@ export default class Login extends Component {
     Keyboard.dismiss();
     const data = this.state.userDetails;
     if (
-      this.state.email !== '' &&
-      this.state.password !== '' &&
       this.state.email == data.email &&
       this.state.password == data.password
     ) {
+      AsyncStorage.setItem(keys.accessToken, tokenGenerator());
+      this.props.dispatch(setToken(tokenGenerator()));
+      this.props.dispatch(setLoginState(true));
       this.props.navigation.dispatch(StackActions.replace('Home'));
     } else {
       Alert.alert('Enter Valid Credential');
@@ -113,18 +115,27 @@ export default class Login extends Component {
   }
   render() {
     return (
-      <SafeAreaView style={{...baseStyle.container}}>
-        {/* <View>
+      <Root>
+        <SafeAreaView style={{...baseStyle.container}}>
+          {/* <View>
           <BackButton action={() => this.handleBack()} />
         </View> */}
-        <View>{this.renderLogoView()}</View>
-        <View marginTop={10}>{this.renderCredentialView()}</View>
-        <SubmitButton text="LOGIN" action={() => this.handleSubmit()} />
-        <View>{this.renderSignUpView()}</View>
-      </SafeAreaView>
+          <View>{this.renderLogoView()}</View>
+          <View marginTop={10}>{this.renderCredentialView()}</View>
+          <SubmitButton text="LOGIN" action={() => this.handleSubmit()} />
+          <View>{this.renderSignUpView()}</View>
+        </SafeAreaView>
+      </Root>
     );
   }
 }
+function mapStateToProps(state) {
+  const {tokenReducer} = state;
+  return {
+    token: tokenReducer,
+  };
+}
+export default connect(mapStateToProps)(Login);
 const styles = StyleSheet.create({
   logo: {
     alignSelf: 'center',

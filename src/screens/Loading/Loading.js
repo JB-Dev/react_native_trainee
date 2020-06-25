@@ -4,29 +4,52 @@ import baseStyle from '../../config/baseStyle';
 import colors from '../../config/colors';
 import AsyncStorage from '@react-native-community/async-storage';
 import keys from '../../config/keys';
-export default class Loading extends Component {
+import {connect, Provider} from 'react-redux';
+import {setToken} from '../../store/action/setToken';
+import {setLoginState} from '../../store/action/setLoginState';
+import {StackActions} from '@react-navigation/native';
+import {Root} from 'native-base';
+
+class Loading extends Component {
   constructor(props) {
     super(props);
     this.state = {};
-    // this.getUserData();
+    this.getUserData();
   }
 
   getUserData = async () => {
-    const userData = await AsyncStorage.getItem(keys.userData);
-    console.log(userData);
-    if (userData !== null) {
-      this.props.navigation.navigate('Profile');
-    } else {
-      this.props.navigation.navigate('Login');
-    }
+    await AsyncStorage.getItem(keys.accessToken).then((token) => {
+      if (token !== null) {
+        this.props.dispatch(setToken(token));
+        this.props.dispatch(setLoginState('true'));
+        console.log(token);
+        this.props.navigation.dispatch(StackActions.replace('Home'));
+      } else {
+        this.props.dispatch(setToken(''));
+        this.props.dispatch(setLoginState('false'));
+        this.props.navigation.dispatch(StackActions.replace('Login'));
+      }
+    });
   };
+
   render() {
     return (
-      <ActivityIndicator
-        color={colors.colorAccent}
-        size="large"
-        style={{...baseStyle.container}}
-      />
+      <Root>
+        <ActivityIndicator
+          color={colors.colorAccent}
+          size="large"
+          style={{...baseStyle.container}}
+        />
+      </Root>
     );
   }
 }
+function mapStateToProps(state) {
+  const {tokenReducer} = state;
+  const {loginReducer} = state;
+  return {
+    token: tokenReducer,
+    isLoggedIn: loginReducer,
+  };
+}
+export default connect(mapStateToProps)(Loading);

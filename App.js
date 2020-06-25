@@ -9,16 +9,15 @@ import Profile from './src/screens/profile/profile';
 import Details from './src/screens/details/details';
 import SignUp from './src/screens/SignUp/SignUp';
 import Loading from './src/screens/Loading/Loading';
-import {View} from 'native-base';
-import {set} from 'react-native-reanimated';
-import {setLoginState} from './src/store/action/setLoginState';
+import {Provider} from 'react-redux';
+import store from './src/store/store';
+import {Root} from 'native-base';
 
-const Stack = createStackNavigator();
 const Tabs = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 const ProfileStack = createStackNavigator();
-const AuthSatck = createStackNavigator();
+const Stack = createStackNavigator();
 
 const HomeStackScreen = () => (
   <HomeStack.Navigator headerMode="none">
@@ -44,40 +43,19 @@ const TabScreen = () => (
   </Tabs.Navigator>
 );
 export default () => {
-  const [isLoading, setIsLoading] = React.useState(true);
-  var userData = '';
-  var screen = '';
-  const getUserData = async () => {
-    userData = await AsyncStorage.getItem(keys.userData);
-  };
-
-  React.useEffect(() => {
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 1000);
-  }, []);
-
-  if (isLoading) {
-    return <Loading />;
-  }
-
-  if (userData === null) {
-    setLoginState('true');
-    screen = 'Home';
-  } else {
-    setLoginState('false');
-    screen = 'Login';
-  }
-
   return (
-    <NavigationContainer>
-      <AuthSatck.Navigator headerMode="none" initialRouteName={screen}>
-        {/* <AuthSatck.Screen name="Start" component={StartScreen} /> */}
-        <AuthSatck.Screen name="Login" component={Login} />
-        <AuthSatck.Screen name="SignUp" component={SignUp} />
-        <AuthSatck.Screen name="Home" component={DrawerStackScreen} />
-        <AuthSatck.Screen name="Profile" component={ProfileStackScreen} />
-      </AuthSatck.Navigator>
-    </NavigationContainer>
+    <Provider store={store}>
+      <Root>
+        <NavigationContainer>
+          <Stack.Navigator headerMode="none" initialRouteName={Loading}>
+            <Stack.Screen name="Loading" component={Loading} />
+            <Stack.Screen name="Login" component={Login} />
+            <Stack.Screen name="SignUp" component={SignUp} />
+            <Stack.Screen name="Home" component={DrawerStackScreen} />
+            <Stack.Screen name="Profile" component={ProfileStackScreen} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </Root>
+    </Provider>
   );
 };
