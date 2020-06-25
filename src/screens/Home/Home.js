@@ -1,16 +1,12 @@
 import React, {Component} from 'react';
-import {View, Text, Root} from 'native-base';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {View, Text} from 'react-native';
+import {TouchableOpacity, FlatList} from 'react-native-gesture-handler';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {Alert} from 'react-native';
 import {connect} from 'react-redux';
 import {logout} from '../../utils/helper';
+import {Root} from 'native-base';
 
 class Home extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return (
       <Root>

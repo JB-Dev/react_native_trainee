@@ -28,6 +28,7 @@ const HomeStackScreen = () => (
 const DrawerStackScreen = () => (
   <Drawer.Navigator initialRouteName="Home">
     <Drawer.Screen name="Home" component={TabScreen} />
+    <Drawer.Screen name="Details" component={Details} />
     <Drawer.Screen name="Profile" component={ProfileStackScreen} />
   </Drawer.Navigator>
 );
