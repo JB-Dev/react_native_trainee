@@ -21,12 +21,14 @@ import {
   GraphRequest,
   GraphRequestManager,
 } from 'react-native-fbsdk';
+import auth from '@react-native-firebase/auth';
 
 export default class Profile extends Component {
   constructor(props) {
     super(props);
     this.state = {
       userInfo: null,
+      googleToken: null,
       gettingLoginStatus: true,
       user_name: '',
       token: null,
@@ -34,7 +36,19 @@ export default class Profile extends Component {
     };
   }
 
-  renderGoogleSignInData() {}
+  setGoogleUser() {
+    const provider = auth.GoogleAuthProvider;
+    const credential = provider.credential(this.state.googleToken);
+    auth()
+      .signInWithCredential(credential)
+      .then((data) => {
+        console.log('SUCCESS', data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   componentDidMount() {
     //initial configuration
     GoogleSignin.configure({
@@ -87,7 +101,8 @@ export default class Profile extends Component {
       });
       const userInfo = await GoogleSignin.signIn();
       console.log('User Info --> ', userInfo);
-      this.setState({userInfo: userInfo});
+      this.setState({userInfo: userInfo, googleToken: userInfo.idToken});
+      this.setGoogleUser();
     } catch (error) {
       console.log('Message', error.message);
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {

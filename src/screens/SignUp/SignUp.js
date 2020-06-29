@@ -7,6 +7,7 @@ import {
   ScrollView,
   Alert,
   Keyboard,
+  Platform,
 } from 'react-native';
 import baseStyle from '../../config/baseStyle';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -108,9 +109,10 @@ export default class SignUp extends Component {
       <View>
         <View style={{flexDirection: 'row'}}>
           <Text style={{...styles.textInputText}}>{strings.Gender}</Text>
-          <View padding={10}>
+          <View padding={Platform.OS == 'ios' ? 10 : 0}>
             <RNPickerSelect
               placeholder={{}}
+              useNativeAndroidPickerStyle={false}
               items={this.state.genderChoice}
               onValueChange={(value) => {
                 this.setState({gender: value});
@@ -159,6 +161,7 @@ export default class SignUp extends Component {
   }
 
   setUserData = async (user_details) => {
+    console.log(JSON.stringify(user_details));
     await AsyncStorage.setItem(keys.userData, JSON.stringify(user_details));
   };
 

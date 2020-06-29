@@ -12,6 +12,7 @@ import Loading from './src/screens/Loading/Loading';
 import {Provider} from 'react-redux';
 import store from './src/store/store';
 import {Root} from 'native-base';
+import Chat from './src/screens/Chat/Chat';
 
 const Tabs = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
@@ -30,6 +31,7 @@ const DrawerStackScreen = () => (
     <Drawer.Screen name="Home" component={TabScreen} />
     <Drawer.Screen name="Details" component={Details} />
     <Drawer.Screen name="Profile" component={ProfileStackScreen} />
+    <Drawer.Screen name="Chat" component={Chat} />
   </Drawer.Navigator>
 );
 const ProfileStackScreen = () => (

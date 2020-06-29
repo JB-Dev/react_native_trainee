@@ -31,18 +31,22 @@ class Login extends Component {
       password: '12345678',
       userDetails: '',
     };
+  }
+
+  async componentDidMount() {
     this.getUserData();
   }
 
   getUserData = async () => {
     try {
       const userData = await AsyncStorage.getItem(keys.userData);
+      console.log(userData);
       if (userData !== null) {
         this.setState({
           userDetails: JSON.parse(userData),
         });
       } else {
-        // Alert.alert(strings.somethingWrong);
+        console.log(strings.somethingWrong);
       }
     } catch (e) {
       console.log(e);
@@ -66,6 +70,7 @@ class Login extends Component {
   handleSubmit() {
     Keyboard.dismiss();
     const data = this.state.userDetails;
+    console.log(data);
     if (
       this.state.email == data.email &&
       this.state.password == data.password
