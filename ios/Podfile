@@ -80,6 +80,8 @@ target 'react_native_trainee' do
   pod 'Firebase/Core'
   pod 'Firebase/Analytics'
 
+  pod 'FBSDKLoginKit'
+
   target 'react_native_traineeTests' do
     inherit! :complete
     # Pods for testing

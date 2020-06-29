@@ -1,17 +1,26 @@
 import React, {Component} from 'react';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {TextInput, StyleSheet, Text, ActivityIndicator} from 'react-native';
-import basestyle from '../../config/baseStyle';
-import LinearGradient from 'react-native-linear-gradient';
 import colors from '../../config/colors';
-import {color} from 'react-native-reanimated';
-import {View} from 'native-base';
+import {
+  View,
+  StyleSheet,
+  Text,
+  Alert,
+  Image,
+  ActivityIndicator,
+} from 'react-native';
 import {
   GoogleSignin,
   GoogleSigninButton,
   statusCodes,
 } from '@react-native-community/google-signin';
+import {
+  LoginButton,
+  AccessToken,
+  GraphRequest,
+  GraphRequestManager,
+} from 'react-native-fbsdk';
 
 export default class Profile extends Component {
   constructor(props) {
@@ -19,8 +28,13 @@ export default class Profile extends Component {
     this.state = {
       userInfo: null,
       gettingLoginStatus: true,
+      user_name: '',
+      token: null,
+      profile_pic: '',
     };
   }
+
+  renderGoogleSignInData() {}
   componentDidMount() {
     //initial configuration
     GoogleSignin.configure({
@@ -33,6 +47,7 @@ export default class Profile extends Component {
     //Check if user is already signed in
     this._isSignedIn();
   }
+
   _isSignedIn = async () => {
     const isSignedIn = await GoogleSignin.isSignedIn();
     if (isSignedIn) {
@@ -97,6 +112,29 @@ export default class Profile extends Component {
       console.error(error);
     }
   };
+
+  get_Response_Info = (error, result) => {
+    if (error) {
+      //Alert for the Error
+      Alert.alert('Error fetching data: ' + error.toString());
+    } else {
+      //response alert
+      alert(JSON.stringify(result));
+      this.setState({user_name: 'Welcome' + ' ' + result.name});
+      this.setState({token: 'User Token: ' + ' ' + result.id});
+      this.setState({profile_pic: result.picture.data.url});
+    }
+  };
+
+  onLogout = async () => {
+    //Clear the state after logout
+    this.setState({
+      user_name: null,
+      token: null,
+      profile_pic: null,
+    });
+  };
+
   render() {
     if (this.state.gettingLoginStatus) {
       return (
@@ -124,32 +162,67 @@ export default class Profile extends Component {
             </TouchableOpacity>
           </View>
         );
+      } else if (this.state.token !== null) {
+        return (
+          <View>
+            {this.state.profile_pic ? (
+              <Image
+                source={{uri: this.state.profile_pic}}
+                style={styles.imageStyle}
+              />
+            ) : null}
+            <Text style={styles.text}> {this.state.user_name} </Text>
+            <Text> {this.state.token} </Text>
+            <LoginButton onLogoutFinished={this.onLogout} />
+          </View>
+        );
       } else {
         return (
           <SafeAreaView style={styles.container}>
-            <TextInput
-              placeholder="Email or Phone number"
-              placeholderTextColor={'#329BFF'}
-              style={styles.textInput}
-            />
-            <View style={styles.loginContainer}>
-              <LinearGradient
-                colors={['#17C8FF', '#329BFF', '#4C64FF']}
-                start={{x: 0.0, y: 1.0}}
-                end={{x: 1.0, y: 1.0}}
-                style={styles.grediant}>
-                <TouchableOpacity style={{alignSelf: 'center'}}>
-                  <Text style={styles.text}>Facebook</Text>
-                </TouchableOpacity>
-              </LinearGradient>
-              <View>
-                <GoogleSigninButton
-                  style={{width: 200}}
-                  size={GoogleSigninButton.Size.Wide}
-                  color={GoogleSigninButton.Color.Light}
-                  onPress={this._signIn}
-                />
-              </View>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-evenly',
+                alignItems: 'center',
+              }}>
+              <LoginButton
+                readPermissions={['public_profile email']}
+                onLoginFinished={(error, result) => {
+                  if (error) {
+                    alert(error);
+                    alert('login has error: ' + result.error);
+                  } else if (result.isCancelled) {
+                    alert('login is cancelled.');
+                  } else {
+                    AccessToken.getCurrentAccessToken().then((data) => {
+                      alert(data.accessToken.toString());
+                      this.setState({
+                        token: data.accessToken.toString(),
+                      });
+                      const processRequest = new GraphRequest(
+                        '/me?fields=name,picture.type(large)',
+                        null,
+                        this.get_Response_Info,
+                      );
+                      // Start the graph request.
+                      new GraphRequestManager()
+                        .addRequest(processRequest)
+                        .start();
+                    });
+                  }
+                }}
+                onLogoutFinished={this.onLogout}
+              />
+              <GoogleSigninButton
+                style={{
+                  width: 200,
+                  height: 40,
+                  borderRadius: 10,
+                }}
+                size={GoogleSigninButton.Size.Wide}
+                color={GoogleSigninButton.Color.Light}
+                onPress={this._signIn}
+              />
             </View>
           </SafeAreaView>
         );
@@ -192,7 +265,7 @@ const styles = StyleSheet.create({
     borderRadius: 40,
   },
   text: {
-    color: '#fff',
+    color: '#000',
   },
   imageStyle: {
     width: 200,

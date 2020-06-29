@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">react_native_trainee</string>
+    <string name="facebook_app_id">1154217964911749</string>
+    <string name="fb_login_protocol_scheme">fb1154217964911749</string>
 </resources>
