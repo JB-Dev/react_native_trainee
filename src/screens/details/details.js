@@ -21,6 +21,7 @@ export default class Details extends React.Component {
           loading: false,
           dataSource: responseJson,
         });
+        console.log(this.state.dataSource);
       })
       .catch((error) => console.log(error)); //to catch the errors if any
   }

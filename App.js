@@ -13,6 +13,9 @@ import {Provider} from 'react-redux';
 import store from './src/store/store';
 import {Root} from 'native-base';
 import Chat from './src/screens/Chat/Chat';
+import FirebaseGroupChat from './src/screens/FirebaseGroupChat/FirebaseGroupChat';
+import FirebaseChat from './src/screens/FirebaseChat/FirebaseChat';
+import ChatScreen from './src/screens/ChatScreen/ChatScreen';
 
 const Tabs = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
@@ -32,6 +35,8 @@ const DrawerStackScreen = () => (
     <Drawer.Screen name="Details" component={Details} />
     <Drawer.Screen name="Profile" component={ProfileStackScreen} />
     <Drawer.Screen name="Chat" component={Chat} />
+    <Drawer.Screen name="FirebaseChat" component={FirebaseChat} />
+    <Drawer.Screen name="FirebaseGroupChat" component={FirebaseGroupChat} />
   </Drawer.Navigator>
 );
 const ProfileStackScreen = () => (
@@ -45,6 +50,7 @@ const TabScreen = () => (
     <Tabs.Screen name="Profile" component={ProfileStackScreen} />
   </Tabs.Navigator>
 );
+
 export default () => {
   return (
     <Provider store={store}>
@@ -56,6 +62,7 @@ export default () => {
             <Stack.Screen name="SignUp" component={SignUp} />
             <Stack.Screen name="Home" component={DrawerStackScreen} />
             <Stack.Screen name="Profile" component={ProfileStackScreen} />
+            <Stack.Screen name="ChatScreen" component={ChatScreen} />
           </Stack.Navigator>
         </NavigationContainer>
       </Root>

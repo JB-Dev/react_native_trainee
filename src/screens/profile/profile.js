@@ -31,7 +31,7 @@ export default class Profile extends Component {
       googleToken: null,
       gettingLoginStatus: true,
       user_name: '',
-      token: null,
+      facebookToken: null,
       profile_pic: '',
     };
   }
@@ -39,6 +39,19 @@ export default class Profile extends Component {
   setGoogleUser() {
     const provider = auth.GoogleAuthProvider;
     const credential = provider.credential(this.state.googleToken);
+    auth()
+      .signInWithCredential(credential)
+      .then((data) => {
+        console.log('SUCCESS', data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  setFacebookUser() {
+    const provider = auth.FacebookAuthProvider;
+    const credential = provider.credential(this.state.facebookToken);
     auth()
       .signInWithCredential(credential)
       .then((data) => {
@@ -101,7 +114,10 @@ export default class Profile extends Component {
       });
       const userInfo = await GoogleSignin.signIn();
       console.log('User Info --> ', userInfo);
-      this.setState({userInfo: userInfo, googleToken: userInfo.idToken});
+      this.setState({
+        userInfo: userInfo,
+        googleToken: userInfo.idToken,
+      });
       this.setGoogleUser();
     } catch (error) {
       console.log('Message', error.message);
@@ -136,7 +152,7 @@ export default class Profile extends Component {
       //response alert
       alert(JSON.stringify(result));
       this.setState({user_name: 'Welcome' + ' ' + result.name});
-      this.setState({token: 'User Token: ' + ' ' + result.id});
+      this.setState({facebookToken: 'User Token: ' + ' ' + result.id});
       this.setState({profile_pic: result.picture.data.url});
     }
   };
@@ -145,7 +161,7 @@ export default class Profile extends Component {
     //Clear the state after logout
     this.setState({
       user_name: null,
-      token: null,
+      facebookToken: null,
       profile_pic: null,
     });
   };
@@ -177,7 +193,7 @@ export default class Profile extends Component {
             </TouchableOpacity>
           </View>
         );
-      } else if (this.state.token !== null) {
+      } else if (this.state.facebookToken !== null) {
         return (
           <View>
             {this.state.profile_pic ? (
@@ -187,7 +203,7 @@ export default class Profile extends Component {
               />
             ) : null}
             <Text style={styles.text}> {this.state.user_name} </Text>
-            <Text> {this.state.token} </Text>
+            <Text> {this.state.facebookToken} </Text>
             <LoginButton onLogoutFinished={this.onLogout} />
           </View>
         );
@@ -212,7 +228,7 @@ export default class Profile extends Component {
                     AccessToken.getCurrentAccessToken().then((data) => {
                       alert(data.accessToken.toString());
                       this.setState({
-                        token: data.accessToken.toString(),
+                        facebookToken: data.accessToken.toString(),
                       });
                       const processRequest = new GraphRequest(
                         '/me?fields=name,picture.type(large)',
@@ -224,6 +240,7 @@ export default class Profile extends Component {
                         .addRequest(processRequest)
                         .start();
                     });
+                    this.setFacebookUser();
                   }
                 }}
                 onLogoutFinished={this.onLogout}
