@@ -79,6 +79,8 @@ target 'react_native_trainee' do
 
   pod 'FBSDKLoginKit'
 
+  pod 'react-native-sms', :path => '../node_modules/react-native-sms'
+
   target 'react_native_traineeTests' do
     inherit! :complete
     # Pods for testing

@@ -1,5 +1,11 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, FlatList} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  ActivityIndicator,
+} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
@@ -12,6 +18,7 @@ export default class FirebaseChat extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      stores: [],
       userList: [
         {
           name: 'Jaimin Bhut',
@@ -21,7 +28,7 @@ export default class FirebaseChat extends Component {
         {
           name: 'Jaimin Patel',
           email: 'jaiminPatel@gmail.com',
-          uid: 'UcPt0oNoNNhkP0rHEBMpTp5T8Xf1',
+          uid: 'GKXRP2oSTCWLQOe0qdEOPA8Brln2',
         },
       ],
       loading: false,
@@ -32,15 +39,14 @@ export default class FirebaseChat extends Component {
   isMakeArray() {
     var returnArray = [];
     database()
-      .ref('/users/')
+      .ref('/users')
       .once('value', function (snapshot) {
         snapshot.forEach(function (snap) {
           var item = snap.val();
           item.key = snap.key;
           returnArray.push(item);
         });
-        data = returnArray;
-        console.log('user', data);
+        console.log('user', returnArray);
       });
   }
   gotoChatScreen = (uid, name) => {
@@ -69,13 +75,13 @@ export default class FirebaseChat extends Component {
     return (
       <SafeAreaView>
         <View>
-          <Text style={styles.header}></Text>
+          <Text style={styles.header}>{this.state.stores}</Text>
         </View>
         <View>
           <FlatList
             data={this.state.userList}
             renderItem={(item) => this.renderItem(item)}
-            keyExtractor={(item) => item.email}
+            keyExtractor={(item) => item.key}
           />
         </View>
       </SafeAreaView>

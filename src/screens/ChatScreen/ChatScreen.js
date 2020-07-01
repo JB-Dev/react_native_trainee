@@ -21,13 +21,35 @@ export default class ChatScreen extends Component {
     this.setState({
       senderId: auth().currentUser.uid,
     });
-    Firebase.getMessages(
-      ((message, this.state.senderId, this.state.reciverId) = () =>
-        this.setState((previous) => ({
-          messages: GiftedChat.append(previous.messages, message),
-        }))),
-    );
+    this.getMessages((message) => {
+      this.setState((previous) => ({
+        messages: GiftedChat.append(previous.messages, message),
+      }));
+    });
   }
+
+  parseMessage = (mes) => {
+    const {user, text, timestamp} = mes.val();
+    const {key: _id} = mes;
+    const createdAt = new Date(timestamp);
+    return {
+      _id,
+      createdAt,
+      text,
+      user,
+    };
+  };
+
+  getMessages = (callback, senderId, reciverId) => {
+    this.dbMessages(senderId, reciverId).on('child_added', (snapshot) =>
+      callback(this.parseMessage(snapshot)),
+    );
+  };
+
+  //get child messages
+  dbMessages = (senderId, reciverId) => {
+    return database().ref(`/users/${senderId}/${reciverId}/messageList/`);
+  };
 
   isSend() {
     const message = {
@@ -43,9 +65,9 @@ export default class ChatScreen extends Component {
       .push(message)
       .then(() => console.log('data set'));
   }
-  componentWillUnmount() {
-    Firebase.offDbMessages();
-  }
+  //   componentWillUnmount() {
+  //     Firebase.offDbMessages();
+  //   }
   render() {
     const chat = (
       <GiftedChat

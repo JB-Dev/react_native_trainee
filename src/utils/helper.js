@@ -25,6 +25,16 @@ export const tokenGenerator = () => {
   }
   return token;
 };
+
+export const otpGenerator = () => {
+  const randomString = '1234567890';
+  var token = '';
+  var length = randomString.length;
+  for (var i = 0; i < 6; i++) {
+    token += randomString.charAt(Math.floor(Math.random() * length));
+  }
+  return token;
+};
 export const logout = (props) => {
   AsyncStorage.clear();
   props.dispatch(setToken(''));

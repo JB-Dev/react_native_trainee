@@ -21,7 +21,7 @@ export default class FirebaseGroupChat extends Component {
   }
 
   componentWillUnmount() {
-    Firebase.offDbMessages();
+    Firebase.offDbUseres();
   }
   render() {
     const chat = (

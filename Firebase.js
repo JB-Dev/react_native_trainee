@@ -75,7 +75,7 @@ class Firebase {
         timestamp: database.ServerValue.TIMESTAMP,
         user: item.user,
       };
-      this.dbMessages.push(message);
+      this.dbUser.push(message);
     });
   };
 
@@ -105,8 +105,8 @@ class Firebase {
   };
 
   //used for get messages
-  getMessages = (callback, senderId, reciverId) => {
-    this.dbMessages(senderId, reciverId).on('child_added', (snapshot) =>
+  getMessages = (callback) => {
+    this.dbUser.on('child_added', (snapshot) =>
       callback(this.parseMessage(snapshot)),
     );
   };

@@ -152,11 +152,33 @@ export default class Profile extends Component {
       //response alert
       alert(JSON.stringify(result));
       this.setState({user_name: 'Welcome' + ' ' + result.name});
-      this.setState({facebookToken: 'User Token: ' + ' ' + result.id});
+      this.setState({
+        facebookToken: 'User Token: ' + ' ' + result.id,
+      });
       this.setState({profile_pic: result.picture.data.url});
     }
   };
-
+  createUser = (userInfo) => {
+    var userID = auth().currentUser.uid;
+    var userEmail = auth().currentUser;
+    var ref = database().ref(`/users/userdetails/${userID}`);
+    ref.once('value').then(function (snapshot) {
+      var a = snapshot.exists();
+      if (a) {
+        console.log('already a member');
+      } else {
+        console.log('create user');
+        database()
+          .ref(`/users/userdetails/${userID}`)
+          .set({
+            name: userInfo.user.name,
+            email: userInfo.user.email,
+            profile_pic: userInfo.user.photo,
+          })
+          .then(() => console.log('data set'));
+      }
+    });
+  };
   onLogout = async () => {
     //Clear the state after logout
     this.setState({
@@ -240,7 +262,6 @@ export default class Profile extends Component {
                         .addRequest(processRequest)
                         .start();
                     });
-                    this.setFacebookUser();
                   }
                 }}
                 onLogoutFinished={this.onLogout}
