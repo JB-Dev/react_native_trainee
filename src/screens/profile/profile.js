@@ -66,7 +66,7 @@ export default class Profile extends Component {
     //initial configuration
     GoogleSignin.configure({
       //It is mandatory to call this method before attempting to call signIn()
-      scopes: ['https://www.googleapis.com/auth/drive.readonly'],
+      // scopes: ['https://www.googleapis.com/auth/drive.readonly'],
       // Repleace with your webClientId generated from Firebase console
       webClientId:
         '363312574351-k0shud1r5pupnp70s0kqvm8bpfpf6c5h.apps.googleusercontent.com',

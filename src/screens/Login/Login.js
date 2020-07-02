@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, useEffect} from 'react';
 import baseStyle from '../../config/baseStyle';
 import colors from '../../config/colors';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -74,6 +74,7 @@ class Login extends Component {
   }
 
   handleSubmit() {
+    this.getUserData();
     Keyboard.dismiss();
     const data = this.state.userDetails;
     console.log(data);

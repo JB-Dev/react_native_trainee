@@ -31,7 +31,7 @@ class Home extends Component {
       .catch((p) => console.log(p));
   }
 
-  otpHandler = (message: string) => {
+  otpHandler = (message) => {
     const otp = /(\d{6})/g.exec(message)[1];
     this.setState({otp: otp});
     console.log(otp);
