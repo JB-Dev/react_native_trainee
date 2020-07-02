@@ -13,6 +13,8 @@ export default class FirebaseGroupChat extends Component {
     };
   }
   componentDidMount() {
+    // (sid = 'UcPt0oNoNNhkP0rHEBMpTp5T8Xf1'),
+    //   (rid = '6eSWmcV7N5NDMvXkLAGJOaNdNTx2'),
     Firebase.getMessages((message) =>
       this.setState((previous) => ({
         messages: GiftedChat.append(previous.messages, message),

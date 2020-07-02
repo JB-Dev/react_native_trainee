@@ -23,7 +23,7 @@ class Loading extends Component {
         this.props.dispatch(setToken(token));
         this.props.dispatch(setLoginState('true'));
         console.log(token);
-        this.props.navigation.dispatch(StackActions.replace('Home'));
+        this.props.navigation.dispatch(StackActions.replace('Dashboard'));
       } else {
         this.props.dispatch(setToken(''));
         this.props.dispatch(setLoginState('false'));

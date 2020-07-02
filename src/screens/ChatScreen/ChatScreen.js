@@ -41,14 +41,12 @@ export default class ChatScreen extends Component {
   };
 
   getMessages = (callback, senderId, reciverId) => {
-    this.dbMessages(senderId, reciverId).on('child_added', (snapshot) =>
-      callback(this.parseMessage(snapshot)),
-    );
-  };
-
-  //get child messages
-  dbMessages = (senderId, reciverId) => {
-    return database().ref(`/users/${senderId}/${reciverId}/messageList/`);
+    senderId = 'UcPt0oNoNNhkP0rHEBMpTp5T8Xf1';
+    reciverId = '6eSWmcV7N5NDMvXkLAGJOaNdNTx2';
+    console.log(senderId, reciverId);
+    database()
+      .ref(`/users/${senderId}/${reciverId}/messageList/`)
+      .on('child_added', (snapshot) => callback(this.parseMessage(snapshot)));
   };
 
   isSend() {

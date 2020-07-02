@@ -84,7 +84,7 @@ class Login extends Component {
       AsyncStorage.setItem(keys.accessToken, tokenGenerator());
       this.props.dispatch(setToken(tokenGenerator()));
       this.props.dispatch(setLoginState('true'));
-      this.props.navigation.dispatch(StackActions.replace('Home'));
+      this.props.navigation.dispatch(StackActions.replace('Dashboard'));
     } else {
       // Alert.alert('Enter Valid Credential');
     }

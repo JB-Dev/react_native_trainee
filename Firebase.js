@@ -1,6 +1,7 @@
 import firebase from '@react-native-firebase/app';
 import auth from '@react-native-firebase/auth';
 import database from '@react-native-firebase/database';
+import {Alert} from 'react-native';
 class Firebase {
   constructor() {
     this.init();
@@ -105,10 +106,13 @@ class Firebase {
   };
 
   //used for get messages
-  getMessages = (callback) => {
-    this.dbUser.on('child_added', (snapshot) =>
-      callback(this.parseMessage(snapshot)),
-    );
+  getMessages = (callback, senderId, reciverId) => {
+    console.log(senderId, reciverId);
+    database()
+      .ref(
+        `/users/UcPt0oNoNNhkP0rHEBMpTp5T8Xf1/6eSWmcV7N5NDMvXkLAGJOaNdNTx2/messageList/`,
+      )
+      .on('child_added', (snapshot) => callback(this.parseMessage(snapshot)));
   };
 
   //close dbUser
@@ -122,7 +126,7 @@ class Firebase {
   }
 
   //get child messages
-  dbMessages(senderId, reciverId) {
+  get dbMessages() {
     return database().ref(`/users/${senderId}/${reciverId}/messageList/`);
   }
 

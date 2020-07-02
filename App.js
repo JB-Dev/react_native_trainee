@@ -17,6 +17,7 @@ import FirebaseGroupChat from './src/screens/FirebaseGroupChat/FirebaseGroupChat
 import FirebaseChat from './src/screens/FirebaseChat/FirebaseChat';
 import ChatScreen from './src/screens/ChatScreen/ChatScreen';
 import OtpVerification from './src/screens/otpVerificaton/otpVerification';
+import Dashboard from './src/screens/Dashboard/Dashboard';
 
 const Tabs = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
@@ -30,13 +31,20 @@ const HomeStackScreen = () => (
     <HomeStack.Screen name="Details" component={Details} />
   </HomeStack.Navigator>
 );
+
+const DashboardStackScreen = () => (
+  <HomeStack.Navigator headerMode="none">
+    <HomeStack.Screen name="Dashboard" component={Dashboard} />
+    <HomeStack.Screen name="Details" component={Details} />
+  </HomeStack.Navigator>
+);
 const DrawerStackScreen = () => (
   <Drawer.Navigator initialRouteName="Home">
     <Drawer.Screen name="Home" component={TabScreen} />
     <Drawer.Screen name="Details" component={Details} />
     <Drawer.Screen name="Profile" component={ProfileStackScreen} />
     <Drawer.Screen name="Chat" component={Chat} />
-    {/* <Drawer.Screen name="FirebaseChat" component={FirebaseChat} /> */}
+    <Drawer.Screen name="FirebaseChat" component={FirebaseChat} />
     <Drawer.Screen name="FirebaseGroupChat" component={FirebaseGroupChat} />
   </Drawer.Navigator>
 );
@@ -47,7 +55,7 @@ const ProfileStackScreen = () => (
 );
 const TabScreen = () => (
   <Tabs.Navigator tabBarOptions={{showIcon: false}}>
-    <Tabs.Screen name="Home" component={HomeStackScreen} />
+    <Tabs.Screen name="Home" component={DashboardStackScreen} />
     <Tabs.Screen name="Profile" component={ProfileStackScreen} />
   </Tabs.Navigator>
 );
@@ -61,7 +69,7 @@ export default () => {
             <Stack.Screen name="Loading" component={Loading} />
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="SignUp" component={SignUp} />
-            <Stack.Screen name="Home" component={DrawerStackScreen} />
+            <Stack.Screen name="Dashboard" component={DrawerStackScreen} />
             <Stack.Screen name="Profile" component={ProfileStackScreen} />
             <Stack.Screen name="ChatScreen" component={ChatScreen} />
             <Stack.Screen name="OtpVerification" component={OtpVerification} />

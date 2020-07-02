@@ -23,12 +23,12 @@ export default class FirebaseChat extends Component {
         {
           name: 'Jaimin Bhut',
           email: 'jaiminbhut35@gmail.com',
-          uid: '6eSWmcV7N5NDMvXkLAGJOaNdNTx2',
+          uid: 'UcPt0oNoNNhkP0rHEBMpTp5T8Xf1',
         },
         {
           name: 'Jaimin Patel',
           email: 'jaiminPatel@gmail.com',
-          uid: 'GKXRP2oSTCWLQOe0qdEOPA8Brln2',
+          uid: '6eSWmcV7N5NDMvXkLAGJOaNdNTx2',
         },
       ],
       loading: false,

@@ -22,7 +22,7 @@ import {
   GraphRequestManager,
 } from 'react-native-fbsdk';
 import auth from '@react-native-firebase/auth';
-
+import database from '@react-native-firebase/database';
 export default class Profile extends Component {
   constructor(props) {
     super(props);
@@ -119,6 +119,9 @@ export default class Profile extends Component {
         googleToken: userInfo.idToken,
       });
       this.setGoogleUser();
+      this.createUser(this.state.userInfo);
+
+      console.log(this.state.userInfo);
     } catch (error) {
       console.log('Message', error.message);
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
@@ -158,6 +161,7 @@ export default class Profile extends Component {
       this.setState({profile_pic: result.picture.data.url});
     }
   };
+
   createUser = (userInfo) => {
     var userID = auth().currentUser.uid;
     var userEmail = auth().currentUser;
@@ -169,7 +173,7 @@ export default class Profile extends Component {
       } else {
         console.log('create user');
         database()
-          .ref(`/users/userdetails/${userID}`)
+          .ref(`/users/${userID}`)
           .set({
             name: userInfo.user.name,
             email: userInfo.user.email,
