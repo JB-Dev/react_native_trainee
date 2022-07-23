@@ -1,16 +1,14 @@
-import React, {Component} from 'react';
-import {View, Text, Button, Alert, StyleSheet, Keyboard} from 'react-native';
+import { Root } from 'native-base';
+import React, { Component } from 'react';
+import { Alert, Button, Keyboard, StyleSheet, Text, View } from 'react-native';
 import {
-  TouchableOpacity,
-  FlatList,
-  TextInput,
+  TextInput, TouchableOpacity
 } from 'react-native-gesture-handler';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {connect} from 'react-redux';
-import {logout, otpGenerator} from '../../utils/helper';
-import {Root} from 'native-base';
-import SendSMS from 'react-native-sms';
 import RNOtpVerify from 'react-native-otp-verify';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import SendSMS from 'react-native-sms';
+import { connect } from 'react-redux';
+import { logout, otpGenerator } from '../../utils/helper';
 
 class Home extends Component {
   constructor(props) {

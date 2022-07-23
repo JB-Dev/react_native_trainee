@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, TextInput} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
-import io from 'socket.io-client';
+import {StyleSheet, Text, TextInput} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import io from 'socket.io-client';
 
 export default class Search extends Component {
   constructor(props) {
@@ -14,7 +13,7 @@ export default class Search extends Component {
   }
 
   componentDidMount() {
-    this.socket = io('http://192.168.1.5:3000');
+    this.socket = io('http://192.168.179.38:3000');
     this.socket.on('chat message', (msg) => {
       this.setState({chatMessages: [...this.state.chatMessages, msg]});
     });

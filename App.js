@@ -1,23 +1,23 @@
-import React, {Component, useState} from 'react';
-import Home from '../react_native_trainee/src/screens/Home/Home';
-import Login from '../react_native_trainee/src/screens/Login/Login';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {createDrawerNavigator} from '@react-navigation/drawer';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-import {createDrawerNavigator} from '@react-navigation/drawer';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import Profile from './src/screens/profile/profile';
-import Details from './src/screens/details/details';
-import SignUp from './src/screens/SignUp/SignUp';
-import Loading from './src/screens/Loading/Loading';
-import {Provider} from 'react-redux';
-import store from './src/store/store';
 import {Root} from 'native-base';
-import Chat from './src/screens/Chat/Chat';
-import FirebaseGroupChat from './src/screens/FirebaseGroupChat/FirebaseGroupChat';
-import FirebaseChat from './src/screens/FirebaseChat/FirebaseChat';
+import React from 'react';
+import {Provider} from 'react-redux';
+import {default as Chat, default as Search} from './src/screens/Chat/Chat';
 import ChatScreen from './src/screens/ChatScreen/ChatScreen';
-import OtpVerification from './src/screens/otpVerificaton/otpVerification';
 import Dashboard from './src/screens/Dashboard/Dashboard';
+import Details from './src/screens/details/details';
+import FirebaseChat from './src/screens/FirebaseChat/FirebaseChat';
+import FirebaseGroupChat from './src/screens/FirebaseGroupChat/FirebaseGroupChat';
+import Home from './src/screens/Home/Home';
+import Loading from './src/screens/Loading/Loading';
+import Login from './src/screens/Login/Login';
+import OtpVerification from './src/screens/otpVerificaton/otpVerification';
+import Profile from './src/screens/profile/profile';
+import SignUp from './src/screens/SignUp/SignUp';
+import store from './src/store/store';
 
 const Tabs = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
@@ -66,7 +66,7 @@ export default () => {
       <Root>
         <NavigationContainer>
           <Stack.Navigator headerMode="none" initialRouteName={Loading}>
-            <Stack.Screen name="Loading" component={Loading} />
+            <Stack.Screen name="Loading" component={Search} />
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="SignUp" component={SignUp} />
             <Stack.Screen name="Dashboard" component={DrawerStackScreen} />

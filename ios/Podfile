@@ -1,8 +1,8 @@
-platform :ios, '9.0'
+platform :ios, '11.0'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
 def add_flipper_pods!(versions = {})
-  versions['Flipper'] ||= '~> 0.33.1'
+  versions['Flipper'] ||= '~> 0.74.0'
   versions['DoubleConversion'] ||= '1.1.7'
   versions['Flipper-Folly'] ||= '~> 2.1'
   versions['Flipper-Glog'] ||= '0.3.6'
@@ -35,13 +35,13 @@ end
 
 # Post Install processing for Flipper
 def flipper_post_install(installer)
-  installer.pods_project.targets.each do |target|
-    if target.name == 'YogaKit'
-      target.build_configurations.each do |config|
-        config.build_settings['SWIFT_VERSION'] = '4.1'
-      end
-    end
-  end
+  # installer.pods_project.targets.each do |target|
+  #   if target.name == 'YogaKit'
+  #     target.build_configurations.each do |config|
+  #       config.build_settings['SWIFT_VERSION'] = '4.1'
+  #     end
+  #   end
+  # end
 end
 
 target 'react_native_trainee' do
@@ -69,7 +69,7 @@ target 'react_native_trainee' do
   pod 'React-jsi', :path => '../node_modules/react-native/ReactCommon/jsi'
   pod 'React-jsiexecutor', :path => '../node_modules/react-native/ReactCommon/jsiexecutor'
   pod 'React-jsinspector', :path => '../node_modules/react-native/ReactCommon/jsinspector'
-  pod 'ReactCommon/callinvoker', :path => "../node_modules/react-native/ReactCommon"
+  pod 'React-callinvoker', :path => "../node_modules/react-native/ReactCommon/callinvoker"
   pod 'ReactCommon/turbomodule/core', :path => "../node_modules/react-native/ReactCommon"
   pod 'Yoga', :path => '../node_modules/react-native/ReactCommon/yoga', :modular_headers => true
 
@@ -93,9 +93,9 @@ target 'react_native_trainee' do
   # Note that if you have use_frameworks! enabled, Flipper will not work and
   # you should disable these next few lines.
   add_flipper_pods!
-  post_install do |installer|
-    flipper_post_install(installer)
-  end
+#  post_install do |installer|
+#    flipper_post_install(installer)
+#  end
 end
 
 target 'react_native_trainee-tvOS' do

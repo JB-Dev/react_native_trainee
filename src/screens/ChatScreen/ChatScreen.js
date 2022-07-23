@@ -1,26 +1,24 @@
-import React, {Component} from 'react';
-import {View, Text, SafeAreaView} from 'react-native';
-import {GiftedChat} from 'react-native-gifted-chat';
-import Firebase from '../../../Firebase';
-import auth from '@react-native-firebase/auth';
 import database from '@react-native-firebase/database';
+import React, {Component} from 'react';
+import {SafeAreaView, Text, View} from 'react-native';
+import {GiftedChat} from 'react-native-gifted-chat';
 
 export default class ChatScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
       messages: [],
-      reciverId: this.props.route.params.uid,
+      reciverId: this.props.route?.params?.uid ?? '0',
       senderId: '',
-      name: this.props.route.params.reciverName,
+      name: this.props.route?.params?.reciverName ?? 'Jaimin',
       text: '',
     };
   }
 
   componentDidMount() {
-    this.setState({
-      senderId: auth().currentUser.uid,
-    });
+    // this.setState({
+    //   senderId: auth().currentUser.uid,
+    // });
     this.getMessages((message) => {
       this.setState((previous) => ({
         messages: GiftedChat.append(previous.messages, message),
